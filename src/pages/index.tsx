@@ -1,39 +1,66 @@
-import * as React from 'react';
+import { SyntheticEvent, useState } from 'react';
 
-import Layout from '@/components/layout/Layout';
+import { useMetaMask } from '@/hooks/MetamaskProvider';
+import useWave from '@/hooks/useWaves';
+
+import Layout from '@/components/Layout/Layout';
+import MessageList from '@/components/MessageList';
+import Profile from '@/components/Profile';
 import Seo from '@/components/Seo';
+import WaveForm from '@/components/WaveForm';
+import WaverList from '@/components/WaverList';
 
-/**
- * SVGR Support
- * Caveat: No React Props Type.
- *
- * You can override the next-env if the type is important to you
- * @see https://stackoverflow.com/questions/68103844/how-to-override-next-js-svg-module-declaration
- */
+const HomePage = () => {
+  const { isLoading, connectWallet, profile } = useMetaMask();
+  const { isWaveLoading, sendWave, allWaves, topWavers } = useWave();
 
-export default function HomePage() {
+  const [message, setMessage] = useState<string>('');
+
+  const handleSendWave = (event: SyntheticEvent) => {
+    event.preventDefault();
+
+    if (!profile) {
+      alert('Connect your wallet to start waving.');
+      return;
+    }
+
+    sendWave(message);
+    setMessage('');
+  };
+
   return (
     <Layout>
-      {/* <Seo templateTitle='Home' /> */}
       <Seo />
-
-      <main>
-        <section className='bg-white'>
-          <div className='layout flex min-h-screen flex-col items-center justify-center text-center'>
-            <h1 className='mt-4'>
-              Next.js + Tailwind CSS + TypeScript Starter
-            </h1>
-            <p className='mt-2 text-sm text-gray-800'>
-              A starter for Next.js, Tailwind CSS, and TypeScript with Absolute
-              Import, Seo, Link component, pre-configured with Husky{' '}
-            </p>
-
-            <footer className='absolute bottom-2 text-gray-700'>
-              © {new Date().getFullYear()} By Gaël Thomas
-            </footer>
+      <main className='mainContainer'>
+        <div className='flex flex-col justify-center lg:flex-row'>
+          <div className='basis-1/3'>
+            <Profile
+              isLoading={isLoading}
+              profile={profile}
+              handleConnectWallet={connectWallet}
+            />
           </div>
-        </section>
+          <div className='basis-2/3'>
+            <WaveForm
+              message={message}
+              setMessage={setMessage}
+              isWaveLoading={isWaveLoading}
+              handleSendWave={handleSendWave}
+            />
+          </div>
+        </div>
+
+        <div className='flex flex-col justify-center lg:flex-row'>
+          <div className='basis-1/3'>
+            <WaverList title='Top Wavers' data={topWavers} />
+          </div>
+          <div className='basis-2/3'>
+            <MessageList title='Last Messages' data={allWaves} />
+          </div>
+        </div>
       </main>
     </Layout>
   );
-}
+};
+
+export default HomePage;

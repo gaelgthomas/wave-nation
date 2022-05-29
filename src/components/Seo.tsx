@@ -2,10 +2,9 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 const defaultMeta = {
-  title: 'Next.js + Tailwind CSS + TypeScript Starter',
-  siteName: 'Next.js + Tailwind CSS + TypeScript Starter',
-  description:
-    'A starter for Next.js, Tailwind CSS, and TypeScript with Absolute Import, Seo, Link component, pre-configured with Husky',
+  title: 'Wave Nation - Build a Web3 app with Solidity',
+  siteName: 'Wave Nation - Build a Web3 app with Solidity',
+  description: 'Buildspace "Build a Web3 app with Solidity" by Gaël Thomas',
   /** Without additional '/' on the end */
   url: 'https://tsnext-tw.thcl.dev',
   type: 'website',
@@ -69,6 +68,7 @@ export default function Seo(props: SeoProps) {
         content='/favicon/ms-icon-144x144.png'
       />
       <meta name='theme-color' content='#ffffff' />
+      <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     </Head>
   );
 }
